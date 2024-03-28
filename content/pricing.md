@@ -3,9 +3,9 @@ title: Pricing
 layout: pricing
 draft: false
 plans:
-- title: Basic Plan
+- title: Free Plan
   subtitle: Best For Small Individuals
-  price: 49
+  price: 0
   type: month
   features:
     - Express Service

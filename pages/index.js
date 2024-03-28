@@ -8,10 +8,51 @@ import { Autoplay, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import { getListPage } from "../lib/contentParser";
+import React, { useState } from "react";
+import { Container, Typography, Box } from "@mui/material";
+import { jsx, css } from "@emotion/react";
 
 const Home = ({ frontmatter }) => {
   const { banner, feature, services, workflow, call_to_action } = frontmatter;
   const { title } = config.site;
+  const [excelData, setExcelData] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+      handleExcelFileUpload(file);
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      handleExcelFileUpload(file);
+    }
+  };
+
+  const handleExcelFileUpload = (file) => {
+    const formData = new FormData();
+    formData.append("excelFile", file);
+    
+    fetch("sample_api_test", {
+      method: "POST",
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("API Response:", data);
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+  };
 
   return (
     <Base title={title}>
@@ -40,6 +81,62 @@ const Home = ({ frontmatter }) => {
                 priority
               />
             </div>
+            <Box
+              sx={{
+                border: "2px dashed #3f51b5",
+                borderRadius: "10px",
+                padding: "20px",
+                textAlign: "center",
+                cursor: "pointer",
+                backgroundColor: "#f0f0f0",
+                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                transition: "border-color 0.3s ease",
+                "&:hover": {
+                  borderColor: "#303f9f",
+                },
+                marginTop: "50px",
+              }}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              component="label"
+              htmlFor="fileInput"
+            >
+              <input
+                type="file"
+                id="fileInput"
+                accept=".xlsx, .xls"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                multiple={true}
+              />
+              <Typography
+                variant="h6"
+                sx={{
+                  color: "#3f51b5",
+                  marginBottom: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                {banner.excel.label}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", marginBottom: "20px" }}
+              >
+                {banner.excel.description}
+              </Typography>
+              {previewImage && (
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "200px",
+                    marginTop: "20px",
+                  }}
+                />
+              )}
+            </Box>
           </div>
         </div>
       </section>
@@ -114,7 +211,7 @@ const Home = ({ frontmatter }) => {
                   }`}
                 >
                   <h2 className="font-bold leading-[40px]">{service?.title}</h2>
-                  <p className="mt-4 mb-2">{service?.content}</p>
+                  <p className="mb-2 mt-4">{service?.content}</p>
                   {service.button.enable && (
                     <Link
                       href={service?.button.link}

@@ -1,7 +1,10 @@
 ---
 banner:
-  title: Let us solve your critical website development challenges
-  content: Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nihil enim maxime corporis cumque <br/> totam aliquid nam sint inventore optio modi neque laborum officiis necessitatibus
+  title: Excel Merging Made Easy
+  excel:
+    label: Drag & Drop Excel File or Click to Upload
+    description: "Supported file types: .xlsx, .xls. Maximum file size: 10MB."
+  content: Let us simplify your Excel merging process. Say goodbye to manual merging hassles and effortlessly consolidate your files with our user-friendly solution.
   image: /images/banner-art.svg
   button:
     label: "Contact Us"
