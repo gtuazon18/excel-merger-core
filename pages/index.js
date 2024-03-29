@@ -9,14 +9,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import { getListPage } from "../lib/contentParser";
 import React, { useState } from "react";
-import { Container, Typography, Box, IconButton, Button } from "@mui/material";
-import { jsx, css } from "@emotion/react";
+import { Typography, Box, IconButton, Button } from "@mui/material";
 import { IoMdCloseCircle } from "react-icons/io";
 
 const Home = ({ frontmatter }) => {
   const { banner, feature, services, workflow, call_to_action } = frontmatter;
   const { title } = config.site;
-  const [excelData, setExcelData] = useState(null);
   const [previewImages, setPreviewImages] = useState([]);
 
   const handleFileChange = (event) => {
@@ -268,7 +266,7 @@ const Home = ({ frontmatter }) => {
         );
       })}
 
-      {/* Workflow */}
+      {/* workflow */}
       <section className="section pb-0">
         <div className="mb-8 text-center">
           {markdownify(
