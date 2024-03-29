@@ -9,19 +9,22 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import { getListPage } from "../lib/contentParser";
 import React, { useState } from "react";
-import { Container, Typography, Box } from "@mui/material";
+import { Container, Typography, Box, IconButton, Button } from "@mui/material";
 import { jsx, css } from "@emotion/react";
+import { IoMdCloseCircle } from "react-icons/io";
 
 const Home = ({ frontmatter }) => {
   const { banner, feature, services, workflow, call_to_action } = frontmatter;
   const { title } = config.site;
   const [excelData, setExcelData] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImages, setPreviewImages] = useState([]);
+
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setPreviewImage(URL.createObjectURL(file));
-      handleExcelFileUpload(file);
+    const files = event.target.files;
+    if (files) {
+      const images = Array.from(files).map((file) => URL.createObjectURL(file));
+      setPreviewImages((prevImages) => [...prevImages, ...files]); // Save File objects
+      handleExcelFileUpload(files);
     }
   };
 
@@ -31,26 +34,32 @@ const Home = ({ frontmatter }) => {
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      handleExcelFileUpload(file);
-    }
   };
 
-  const handleExcelFileUpload = (file) => {
+  const handleExcelFileUpload = (files) => {
     const formData = new FormData();
-    formData.append("excelFile", file);
-    
+    Array.from(files).forEach((file) => {
+      formData.append("excelFiles", file);
+    });
+
     fetch("sample_api_test", {
       method: "POST",
       body: formData,
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log("API Response:", data);
-    })
-    .catch(error => {
-      console.error("Error:", error);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("API Response:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const removePreviewImage = (index) => {
+    setPreviewImages((prevImages) => {
+      const updatedImages = [...prevImages];
+      updatedImages.splice(index, 1);
+      return updatedImages;
     });
   };
 
@@ -125,16 +134,40 @@ const Home = ({ frontmatter }) => {
               >
                 {banner.excel.description}
               </Typography>
-              {previewImage && (
-                <img
-                  src={previewImage}
-                  alt="Preview"
+              {previewImages.map((file, index) => (
+                <div
+                  key={index}
                   style={{
-                    maxWidth: "100%",
-                    maxHeight: "200px",
-                    marginTop: "20px",
+                    position: "relative",
+                    marginTop: "10px",
+                    display: "flex",
                   }}
-                />
+                >
+                  <Image
+                    src={banner.excel.image}
+                    alt={`Preview`}
+                    width={30}
+                    height={30}
+                  />
+                  <Typography variant="body2" style={{ marginLeft: "5px" }}>
+                    {file.name}
+                  </Typography>{" "}
+                  <IconButton
+                    onClick={() => removePreviewImage(index)}
+                    style={{ position: "absolute", top: 5, right: 5 }}
+                  >
+                    <IoMdCloseCircle />
+                  </IconButton>
+                </div>
+              ))}
+              {previewImages.length > 0 && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleExcelFileUpload}
+                >
+                  Submit
+                </Button>
               )}
             </Box>
           </div>
@@ -172,7 +205,7 @@ const Home = ({ frontmatter }) => {
         </div>
       </section>
 
-      {/* services */}
+      {/* Services */}
       {services.map((service, index) => {
         const isOdd = index % 2 > 0;
         return (
@@ -234,7 +267,7 @@ const Home = ({ frontmatter }) => {
         );
       })}
 
-      {/* workflow */}
+      {/* Workflow */}
       <section className="section pb-0">
         <div className="mb-8 text-center">
           {markdownify(
@@ -252,7 +285,7 @@ const Home = ({ frontmatter }) => {
         />
       </section>
 
-      {/* Cta */}
+      {/* CTA */}
       <Cta cta={call_to_action} />
     </Base>
   );

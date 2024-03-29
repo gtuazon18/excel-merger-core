@@ -4,6 +4,7 @@ banner:
   excel:
     label: Drag & Drop Excel File or Click to Upload
     description: "Supported file types: .xlsx, .xls. Maximum file size: 10MB."
+    image: /images/sheets.png
   content: Let us simplify your Excel merging process. Say goodbye to manual merging hassles and effortlessly consolidate your files with our user-friendly solution.
   image: /images/banner-art.svg
   button:
