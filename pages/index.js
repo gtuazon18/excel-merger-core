@@ -153,6 +153,7 @@ const Home = ({ frontmatter }) => {
                 <Button
                   className="btn btn-primary mt-4"
                   color="primary"
+                  variant="contained"
                   onClick={handleExcelFileUpload}
                 >
                   Merge
