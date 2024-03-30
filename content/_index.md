@@ -10,6 +10,9 @@ banner:
   button:
     label: "Contact Us"
     link: "/contact"
+  button_merger:
+    label: "Merge"
+    link: "/contact"
 
 # feature
 feature: 
@@ -80,7 +83,7 @@ services:
 
 # workflow
 workflow: 
-  title: "Experience the best workflow with us"
+  title: "Experience the best excel merging with us"
   image: "/images/banner.svg"
   description: ""
 

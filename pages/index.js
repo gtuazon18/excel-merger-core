@@ -22,7 +22,6 @@ const Home = ({ frontmatter }) => {
     if (files) {
       const images = Array.from(files).map((file) => URL.createObjectURL(file));
       setPreviewImages((prevImages) => [...prevImages, ...files]); // Save File objects
-      handleExcelFileUpload(files);
     }
   };
 
@@ -34,9 +33,9 @@ const Home = ({ frontmatter }) => {
     event.preventDefault();
   };
 
-  const handleExcelFileUpload = (files) => {
+  const handleExcelFileUpload = () => {
     const formData = new FormData();
-    Array.from(files).forEach((file) => {
+    previewImages.forEach((file) => {
       formData.append("excelFiles", file);
     });
 
@@ -79,7 +78,6 @@ const Home = ({ frontmatter }) => {
                   {banner.button.label}
                 </Link>
               )}
-   
             </div>
             <Box
               sx={{
@@ -140,7 +138,7 @@ const Home = ({ frontmatter }) => {
                     width={30}
                     height={30}
                   />
-                  <Typography variant="body2" style={{ marginLeft: "5px" }}>
+                  <Typography variant="body2" style={{ marginBlockStart: "auto" }}>
                     {file.name}
                   </Typography>{" "}
                   <IconButton
@@ -153,23 +151,23 @@ const Home = ({ frontmatter }) => {
               ))}
               {previewImages.length > 0 && (
                 <Button
-                  variant="contained"
+                  className="btn btn-primary mt-4"
                   color="primary"
                   onClick={handleExcelFileUpload}
                 >
-                  Submit
+                  Merge
                 </Button>
               )}
             </Box>
           </div>
           <Image
-                className="mx-auto mt-12"
-                src={banner.image}
-                width={750}
-                height={390}
-                alt="banner image"
-                priority
-              />
+            className="mx-auto mt-12"
+            src={banner.image}
+            width={750}
+            height={390}
+            alt="banner image"
+            priority
+          />
         </div>
       </section>
 
